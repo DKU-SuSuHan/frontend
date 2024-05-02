@@ -2,7 +2,18 @@ import styled from 'styled-components';
 import KakaoTalkImg from '../assets/KakaoTalk.png';
 import NaverImg from '../assets/Naver.png';
 
+//vite 환경 변수 사용
+const CLIENT_API_URL = import.meta.env.VITE_CLIENT_API_URL;
+const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
+
 function HomePage() {
+  const REDIRECT_URI = `${CLIENT_API_URL}/auth`;
+  const KAKAOURL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+  function kakaoLoginHandler() {
+    window.location.href = KAKAOURL;
+  }
+
   return (
     <>
       <Container>
@@ -19,7 +30,7 @@ function HomePage() {
           <p />
           트래블 픽!
         </Content>
-        <KakaoLoginBtn>
+        <KakaoLoginBtn onClick={kakaoLoginHandler}>
           <KakaoImage src={KakaoTalkImg}></KakaoImage>
           <KakaoLogintext>카카오로 시작하기</KakaoLogintext>
         </KakaoLoginBtn>
