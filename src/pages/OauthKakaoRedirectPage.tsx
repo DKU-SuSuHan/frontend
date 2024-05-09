@@ -1,10 +1,16 @@
 import axios from 'axios';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { getUser } from '../lib/getUser';
+
+import { login } from '../redux/slice/loginSlice';
 
 //vite 환경 변수 사용
 const SERVER_API_URL = import.meta.env.VITE_SERVER_API_URL;
 
 function OauthKakaoRedirectPage() {
+  const dispatch = useDispatch();
   const code = new URL(window.location.href).searchParams.get('code');
   console.log(code);
 
@@ -27,6 +33,9 @@ function OauthKakaoRedirectPage() {
         // 2. 토큰을 locarStorage 저장
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
+
+        getUser();
+        dispatch(login());
       }
     } catch (error: any) {
       console.log('KakaoLogin Error');
