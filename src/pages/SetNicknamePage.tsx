@@ -1,37 +1,129 @@
+import axios from 'axios';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { styled } from 'styled-components';
+import { setNickname } from '../redux/slice/userSlice';
 
+//vite 환경 변수 사용
+const SERVER_API_URL = import.meta.env.VITE_SERVER_API_URL;
+const CLIENT_API_URL = import.meta.env.VIT;
+const accessToken = localStorage.getItem('accessToken');
 function SetNicknamePage() {
-  //nick
-  const [nickNameDuplicationError, setNickNameDuplicationError] =
+  const dispatch = useDispatch();
+  //nickname
+  const [userNickname, setUserNickname] = useState('');
+  const [nicknameDuplicationError, setNicnameDuplicationError] =
     useState(false);
+  const [isCheckedNickname, setIsCheckedNickname] = useState(false);
 
+  async function checkDuplicatedNicknameHandler(event: React.MouseEvent) {
+    event.preventDefault();
+
+    try {
+      const response = await axios.get(
+        `${SERVER_API_URL}/user/check/nickname?nickname=${userNickname}`,
+        {
+          headers: {
+            'access-token': `${accessToken}`,
+          },
+        },
+      );
+
+      console.log(response);
+      if (response.status === 200) {
+        if (!response.data.isDuplicated) {
+          setNicnameDuplicationError(false);
+        } else {
+          setNicnameDuplicationError(true);
+        }
+        setIsCheckedNickname(true);
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  }
+
+  async function setNicknameHandler(event: React.MouseEvent) {
+    event.preventDefault();
+    if (isCheckedNickname) {
+      //중복 검사 한 상태
+      //{api}/users/check/nickname?nckname={값}
+      const body = {
+        nickname: userNickname,
+      };
+      try {
+        const response = await axios.patch(
+          `${SERVER_API_URL}/user/nickname`,
+          body,
+          {
+            headers: {
+              'access-token': `${accessToken}`,
+            },
+          },
+        );
+        console.log(response);
+        if (response.status === 200) {
+          if (response.data.nickname) {
+            dispatch(setNickname(response.data.nickname));
+          }
+
+          alert('닉네임이 성공적으로 생성되었습니다!');
+          window.location.href = `${CLIENT_API_URL}`;
+        }
+      } catch (error: any) {
+        console.log(error);
+      }
+    }
+  }
   return (
     <>
       <Container>
         <Title>Travel Pick</Title>
         <Content>
-          서비스에서 사용하실
+          서비스에서
           <p />
-          사용하실 닉네임을 입력해주세요!
+          사용하실 닉네임을 입력해 주세요!
         </Content>
         <NicknameSetForm>
           <InputContainer>
             <NicknameInput
-              placeholder="닉네임을 입력하세요. 최대 10자"
+              placeholder=" 닉네임을 입력하세요. 최대 10자"
               maxLength={10}
+              value={userNickname}
+              onChange={event => {
+                setUserNickname(event.target.value);
+                setIsCheckedNickname(false);
+              }}
             />
-            <CheckNicknameBtn>중복 확인</CheckNicknameBtn>
+            <CheckNicknameBtn onClick={checkDuplicatedNicknameHandler}>
+              중복 확인
+            </CheckNicknameBtn>
           </InputContainer>
           <ErrorMessageContainer>
-            {nickNameDuplicationError ? (
+            {nicknameDuplicationError && isCheckedNickname ? (
               <NicknameErrorMessage>
-                이미 사용중인 닉네임 입니다.
+                이미 사용중인 닉네임입니다.
               </NicknameErrorMessage>
+            ) : null}
+            {!isCheckedNickname ? (
+              <NicknameErrorMessage>
+                닉네임 중복 확인을 진행해주세요.
+              </NicknameErrorMessage>
+            ) : null}
+            {!nicknameDuplicationError && isCheckedNickname ? (
+              <NicknameCheckedMessage>
+                사용 가능한 닉네임입니다.
+              </NicknameCheckedMessage>
             ) : null}
           </ErrorMessageContainer>
 
-          <NicknameSumbitBtn>등록하기</NicknameSumbitBtn>
+          <NicknameSumbitBtn
+            className={isCheckedNickname ? 'checked' : 'unchecked'}
+            disabled={!isCheckedNickname}
+            onClick={setNicknameHandler}
+          >
+            등록하기
+          </NicknameSumbitBtn>
         </NicknameSetForm>
       </Container>
     </>
@@ -88,7 +180,7 @@ const NicknameInput = styled.input`
 
   box-sizing: border-box;
 
-  width: 240px;
+  width: 230px;
   height: 32px;
   left: 36px;
   top: 283px;
@@ -118,6 +210,11 @@ const ErrorMessageContainer = styled.div`
 `;
 const NicknameErrorMessage = styled.div`
   color: #d24f4f;
+  margin-bottom: 5px;
+  font-size: 12px;
+`;
+const NicknameCheckedMessage = styled.div`
+  color: #4fd24f;
   margin-bottom: 5px;
   font-size: 12px;
 `;
