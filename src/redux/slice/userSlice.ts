@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-// import ProfileImg from '../../assets/ProfileImage.svg';
+import ProfileImg from '../../assets/DefaultProfileImage.png';
 
 export interface userState {
   email: string;
@@ -11,10 +11,10 @@ export interface userState {
 
 const initialState: userState = {
   email: '',
-  nickname: '',
+  nickname: 'user',
   role: 'ADMIN',
   loginType: 'KAKAO',
-  profileImageUrl: '',
+  profileImageUrl: ProfileImg,
 };
 
 export const userSlice = createSlice({
