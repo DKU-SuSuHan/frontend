@@ -3,12 +3,15 @@ import { styled } from 'styled-components';
 import { RootState } from '../redux/store';
 import { AiOutlineBell } from 'react-icons/ai';
 import { AiOutlineUser } from 'react-icons/ai';
+import { AiOutlineEdit } from 'react-icons/ai';
+import TravelList from '../components/TravelList';
 
 function HomePageAfterLogin() {
   const userNickname = useSelector((status: RootState) => status.user.nickname);
   const userProfileImageUrl = useSelector(
     (status: RootState) => status.user.profileImageUrl,
   );
+
   return (
     <>
       <Container>
@@ -28,6 +31,21 @@ function HomePageAfterLogin() {
             </IconBox>
           </IconContainer>
         </Header>
+        <Body>
+          <BodyText>당신의 행복한 여정을 기대합니다!</BodyText>
+          <TravelText>예정된 여행</TravelText>
+          <TravelContanier>
+            <TravelList listType={true} />
+          </TravelContanier>
+          <TravelText>종료된 여행</TravelText>
+          <TravelContanier>
+            <TravelList listType={false} />
+          </TravelContanier>
+        </Body>
+        <AddTravelBtnContainer>
+          <ButtonText>여행 추가 </ButtonText>
+          <AiOutlineEdit />
+        </AddTravelBtnContainer>
       </Container>
     </>
   );
@@ -107,4 +125,69 @@ const IconBox = styled.div`
   }
 `;
 
+const Body = styled.div`
+  margin: 10px 20px;
+`;
+const BodyText = styled.div`
+  /* 당신의 행복한 여정을 기대합니다! */
+
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 150%;
+
+  letter-spacing: -0.011em;
+
+  color: #4a4a4a;
+`;
+const TravelContanier = styled.div`
+  width: 330px;
+  height: 330px;
+  overflow-y: auto;
+  margin: 10px;
+`;
+const TravelText = styled.div`
+  width: 100px;
+  height: 24px;
+
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 150%;
+
+  letter-spacing: -0.011em;
+
+  color: #000000;
+  margin: 10px 0;
+`;
+const AddTravelBtnContainer = styled.div`
+  position: absolute;
+  width: 102px;
+  height: 35px;
+  left: 265px;
+  top: 746px;
+
+  background: #ffd3aa;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  svg {
+    padding: 1px;
+  }
+`;
+const ButtonText = styled.div`
+  /* boutton1 */
+
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 150%;
+
+  color: #4a4a4a;
+`;
 export default HomePageAfterLogin;
