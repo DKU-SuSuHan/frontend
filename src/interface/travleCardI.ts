@@ -1,7 +1,8 @@
 export interface travelCardl {
-  id: Number;
+  id: number;
   title: String;
   startAt: String;
   endAt: String;
-  dateDiff: Number;
+  dateDiff: number;
+  templateNum: number;
 }

@@ -9,11 +9,11 @@ function TravelList({ listType }: { listType: Boolean }) {
 
   const bglist = [
     '#B9B9B9',
-    'linear-gradient(90deg, #F7A748 0%, #487989 100%)',
+    'linear-gradient(90deg, #F9A364 0%, #559BB1 100%)',
     'linear-gradient(90deg, #83D6CC 0%, #EFA08B 100%)',
     'linear-gradient(90deg, #A2CEA4 0%, #7355B1 100%)',
     'linear-gradient(90deg, #243860 0%, #C5B5E7 100%)',
-    'linear-gradient(90deg, #F9A364 0%, #559BB1 100%)',
+    'linear-gradient(90deg, #F9647F 0%, #73B155 100%)',
     'linear-gradient(90deg, #DC5757 0%, #B19D55 100%)',
     'linear-gradient(90deg, #66749e 0%, #e6fc8f 100%)',
     'linear-gradient(90deg, #7fb681 0%, #ca8acf 100%)',
@@ -21,13 +21,11 @@ function TravelList({ listType }: { listType: Boolean }) {
   return (
     <>
       {list.map(item => {
-        const randomNumber = Math.floor(Math.random() * 8 + 1);
-        const randomBackGround = bglist[randomNumber];
-        console.log(randomBackGround);
+        const Bgcolor = item.templateNum;
         return (
           <TravelCardContainer
             key={`${item.id}tcc${listType}`}
-            color={`${listType ? randomBackGround : bglist[0]}`}
+            color={`${listType ? bglist[Bgcolor] : bglist[0]}`}
           >
             <TravelCardContent>
               <TravelTitle>{item.title}</TravelTitle>

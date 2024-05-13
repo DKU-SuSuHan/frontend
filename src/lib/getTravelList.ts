@@ -6,6 +6,7 @@ function getTravelList(params: Boolean) {
       startAt: 'string',
       endAt: 'string',
       dateDiff: 0,
+      templateNum: 2,
     },
     {
       id: 1,
@@ -13,6 +14,7 @@ function getTravelList(params: Boolean) {
       startAt: 'string',
       endAt: 'string',
       dateDiff: 0,
+      templateNum: 1,
     },
     {
       id: 3,
@@ -20,6 +22,7 @@ function getTravelList(params: Boolean) {
       startAt: 'string',
       endAt: 'string',
       dateDiff: 0,
+      templateNum: 4,
     },
     {
       id: 4,
@@ -27,6 +30,7 @@ function getTravelList(params: Boolean) {
       startAt: 'string',
       endAt: 'string',
       dateDiff: 0,
+      templateNum: 5,
     },
   ];
   const mockdataend = [
@@ -36,6 +40,7 @@ function getTravelList(params: Boolean) {
       startAt: 'string',
       endAt: 'string',
       dateDiff: 0,
+      templateNum: 8,
     },
     {
       id: 1,
@@ -43,6 +48,7 @@ function getTravelList(params: Boolean) {
       startAt: 'string',
       endAt: 'string',
       dateDiff: 0,
+      templateNum: 7,
     },
   ];
 
