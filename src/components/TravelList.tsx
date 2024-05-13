@@ -1,11 +1,13 @@
 import { styled } from 'styled-components';
-import { travelCardl } from '../interface/travleCardI';
-import getTravelList from '../lib/getTravelList';
+import { getTravelList } from '../lib/getTravelList';
+import { RootState } from '../redux/store';
+import { useSelector } from 'react-redux';
 
 function TravelList({ listType }: { listType: Boolean }) {
-  const list: Array<travelCardl> = listType
-    ? getTravelList(listType)
-    : getTravelList(listType);
+  getTravelList(listType);
+  const list = useSelector((state: RootState) =>
+    listType ? state.travels.plannedTravels : state.travels.endedTravels,
+  );
 
   const bglist = [
     '#B9B9B9',

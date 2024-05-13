@@ -1,4 +1,4 @@
-export interface travelCardl {
+export interface travelCardStatus {
   id: number;
   title: String;
   startAt: String;
