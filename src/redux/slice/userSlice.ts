@@ -1,13 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import ProfileImg from '../../assets/DefaultProfileImage.png';
-
-export interface userState {
-  email: string;
-  nickname: string;
-  role: string;
-  loginType: string;
-  profileImageUrl: string;
-}
+import { userState } from '../../interface/userStatus';
 
 const initialState: userState = {
   email: '',

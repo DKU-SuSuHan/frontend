@@ -1,12 +1,14 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import loginSlice from '../redux/slice/loginSlice';
 import userSlice from '../redux/slice/userSlice';
+import travelListSlice from '../redux/slice/travelListSlice';
 // configureStore를 사용하여 스토어를 설정
 const store = configureStore({
   reducer: {
     // reducer 속성에는 reducer들을 포함
     login: loginSlice,
     user: userSlice,
+    travels: travelListSlice,
   },
 });
 

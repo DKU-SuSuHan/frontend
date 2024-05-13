@@ -1,11 +1,13 @@
 import { styled } from 'styled-components';
-import { travelCardl } from '../interface/travleCardI';
-import getTravelList from '../lib/getTravelList';
+import { getTravelList } from '../lib/getTravelList';
+import { RootState } from '../redux/store';
+import { useSelector } from 'react-redux';
 
 function TravelList({ listType }: { listType: Boolean }) {
-  const list: Array<travelCardl> = listType
-    ? getTravelList(listType)
-    : getTravelList(listType);
+  getTravelList(listType);
+  const list = useSelector((state: RootState) =>
+    listType ? state.travels.plannedTravels : state.travels.endedTravels,
+  );
 
   const bglist = [
     '#B9B9B9',
@@ -26,6 +28,9 @@ function TravelList({ listType }: { listType: Boolean }) {
           <TravelCardContainer
             key={`${item.id}tcc${listType}`}
             color={`${listType ? bglist[Bgcolor] : bglist[0]}`}
+            onClick={() =>
+              (window.location.href = `/teavel-Roadmap?travelid=${item.id}`)
+            }
           >
             <TravelCardContent>
               <TravelTitle>{item.title}</TravelTitle>
