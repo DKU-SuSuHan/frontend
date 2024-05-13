@@ -23,10 +23,10 @@ function HomePageAfterLogin() {
             <UserNickname>{userNickname} 님</UserNickname>
           </UserProfileContainer>
           <IconContainer>
-            <IconBox>
+            <IconBox onClick={() => (window.location.href = '/alarm')}>
               <AiOutlineBell />
             </IconBox>
-            <IconBox>
+            <IconBox onClick={() => (window.location.href = '/user-info')}>
               <AiOutlineUser />
             </IconBox>
           </IconContainer>
@@ -43,7 +43,9 @@ function HomePageAfterLogin() {
           </TravelContanier>
         </Body>
         <AddTravelBtnContainer>
-          <ButtonText>여행 추가 </ButtonText>
+          <ButtonText onClick={() => (window.location.href = '/add-travel')}>
+            여행 추가{' '}
+          </ButtonText>
           <AiOutlineEdit />
         </AddTravelBtnContainer>
       </Container>

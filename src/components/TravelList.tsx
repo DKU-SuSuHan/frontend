@@ -28,6 +28,9 @@ function TravelList({ listType }: { listType: Boolean }) {
           <TravelCardContainer
             key={`${item.id}tcc${listType}`}
             color={`${listType ? bglist[Bgcolor] : bglist[0]}`}
+            onClick={() =>
+              (window.location.href = `/teavel-Roadmap?travelid=${item.id}`)
+            }
           >
             <TravelCardContent>
               <TravelTitle>{item.title}</TravelTitle>
