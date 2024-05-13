@@ -6,7 +6,7 @@ import NaverImg from '../assets/Naver.png';
 const CLIENT_API_URL = import.meta.env.VITE_CLIENT_API_URL;
 const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
 
-function HomePage() {
+function HomePageBeforeLogin() {
   const REDIRECT_URI = `${CLIENT_API_URL}/auth`;
   const KAKAOURL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
@@ -166,4 +166,4 @@ const NaverLogintext = styled.div`
 
   color: #ffffff;
 `;
-export default HomePage;
+export default HomePageBeforeLogin;
