@@ -7,6 +7,8 @@ import { AREAS } from '../assets/areas';
 import CustomDropdown from '../components/CustomDropdown';
 import { CustomDatePicker } from '../components/CustomDatePicker';
 import TravelMateList from '../components/TravelMateList';
+import SelectTemplate from '../components/SelectTemplate';
+import { bglist } from '../assets/bglist';
 
 function AddTravelPage() {
   const [selectedArea, setSelectedArea] = useState('');
@@ -14,6 +16,9 @@ function AddTravelPage() {
   const [travelStartDate, setTravelStartDate] = useState<Date | null>(
     new Date(),
   );
+
+  const [isClickedChangeTamplate, setIsClickedChangeTamplate] = useState(false);
+  const [templateNumber, setTemplateNumber] = useState(3);
   const [travelEndDate, setTravelEndDate] = useState<Date | null>(null);
 
   const SUBAREAS =
@@ -23,6 +28,11 @@ function AddTravelPage() {
     setSelectedArea(value);
     setSelectedSubArea('');
   };
+
+  function travelTemplateChangeClickHandler() {
+    setIsClickedChangeTamplate(true);
+  }
+
   return (
     <>
       <Container>
@@ -30,8 +40,17 @@ function AddTravelPage() {
           <AiOutlineLeft />
         </Header>
         <Body>
-          <TemplateContainer>
-            <TemplateChangeBtn>커버 변경</TemplateChangeBtn>
+          <TemplateContainer color={`${bglist[templateNumber]}`}>
+            {isClickedChangeTamplate ? (
+              <SelectTemplate
+                setTemplateNumber={setTemplateNumber}
+                setIsClickedChangeTamplate={setIsClickedChangeTamplate}
+              />
+            ) : (
+              <TemplateChangeBtn onClick={travelTemplateChangeClickHandler}>
+                커버 변경
+              </TemplateChangeBtn>
+            )}
           </TemplateContainer>
 
           <TravelFormContainer>
@@ -132,7 +151,7 @@ const TemplateContainer = styled.div`
 
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 
-  background: linear-gradient(90deg, #83d6cc 0%, #efa08b 100%);
+  background: ${prop => prop.color};
   /* border-radius: 0px 0px 10px 10px; */
 `;
 const TemplateChangeBtn = styled.button`
