@@ -9,17 +9,23 @@ import { CustomDatePicker } from '../components/CustomDatePicker';
 import TravelMateList from '../components/TravelMateList';
 import SelectTemplate from '../components/SelectTemplate';
 import { bglist } from '../assets/bglist';
+import { getMateSearch } from '../lib/getMateSearch';
+import { setTravelMateList } from '../redux/slice/travelMateSlice';
+import { useDispatch } from 'react-redux';
 
 function AddTravelPage() {
+  const dispatch = useDispatch();
+  const [travelName, setTravelName] = useState('');
+  const [mateName, setMateName] = useState<string>('');
   const [selectedArea, setSelectedArea] = useState('');
   const [selectedSubArea, setSelectedSubArea] = useState('');
   const [travelStartDate, setTravelStartDate] = useState<Date | null>(
     new Date(),
   );
+  const [travelEndDate, setTravelEndDate] = useState<Date | null>(null);
 
   const [isClickedChangeTamplate, setIsClickedChangeTamplate] = useState(false);
   const [templateNumber, setTemplateNumber] = useState(3);
-  const [travelEndDate, setTravelEndDate] = useState<Date | null>(null);
 
   const SUBAREAS =
     AREAS.find(area => area.name === selectedArea)?.subArea || [];
@@ -32,6 +38,20 @@ function AddTravelPage() {
   function travelTemplateChangeClickHandler() {
     setIsClickedChangeTamplate(true);
   }
+
+  function submitAddTravelHandler(event: React.MouseEvent<HTMLDivElement>) {
+    event.preventDefault();
+  }
+
+  const handleAddMateClick = async () => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      const mateData = await getMateSearch(mateName);
+      if (mateData) {
+        dispatch(setTravelMateList(mateData));
+      }
+    }
+  };
 
   return (
     <>
@@ -56,7 +76,12 @@ function AddTravelPage() {
           <TravelFormContainer>
             <TravelNameContainer>
               <TravelText>여행의 이름을 지어주세요.</TravelText>
-              <TravelNameInput></TravelNameInput>
+              <TravelNameInput
+                value={travelName}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setTravelName(e.target.value);
+                }}
+              ></TravelNameInput>
             </TravelNameContainer>
 
             <TravelPlaceContainer>
@@ -110,16 +135,23 @@ function AddTravelPage() {
             <TravelMateAddContainer>
               <TravelText>여행 메이트를 추가해보세요!</TravelText>
               <TravelMateAddInputContainer>
-                <TravelMateAddInput></TravelMateAddInput>
-                <AiOutlinePlusCircle />
+                <TravelMateAddInput
+                  value={mateName}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setMateName(e.target.value);
+                  }}
+                ></TravelMateAddInput>
+                <AiOutlinePlusCircle onClick={handleAddMateClick} />
               </TravelMateAddInputContainer>
               <TravelMateListContainer>
-                <TravelMateList></TravelMateList>
+                <TravelMateList />
               </TravelMateListContainer>
             </TravelMateAddContainer>
 
             <TravelSubmitButtonContainer>
-              <TravelSubmitBtn>여행 추가</TravelSubmitBtn>
+              <TravelSubmitBtn onClick={submitAddTravelHandler}>
+                여행 추가
+              </TravelSubmitBtn>
               <AiOutlineEdit />
             </TravelSubmitButtonContainer>
           </TravelFormContainer>
