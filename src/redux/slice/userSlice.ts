@@ -3,6 +3,7 @@ import ProfileImg from '../../assets/DefaultProfileImage.png';
 import { userState } from '../../interface/userStatus';
 
 const initialState: userState = {
+  id: -1,
   email: '',
   nickname: 'user',
   role: 'ADMIN',
@@ -14,6 +15,9 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    setId: (state, action) => {
+      state.id = action.payload;
+    },
     setEmail: (state, action) => {
       state.email = action.payload;
     },
@@ -33,6 +37,7 @@ export const userSlice = createSlice({
 });
 
 export const {
+  setId,
   setEmail,
   setNickname,
   setRole,
