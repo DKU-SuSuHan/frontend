@@ -16,6 +16,9 @@ import { travelFormStatus } from '../interface/travelFormStatus';
 import { postNewTravel } from '../lib/postNewTravel';
 import { postTravelMates } from '../lib/postTravelMates';
 
+//vite 환경 변수 사용
+// const CLIENT_API_URL = import.meta.env.VITE_CLIENT_API_URL;
+
 function AddTravelPage() {
   const dispatch = useDispatch();
   const [travelName, setTravelName] = useState('');
@@ -62,6 +65,7 @@ function AddTravelPage() {
       const travelid = await postNewTravel({ data });
       if (travelid) {
         postTravelMates(travelid);
+        window.location.href = '/';
       } else {
         console.log('새로운 여행 등록에 실패하였습니다.');
       }
