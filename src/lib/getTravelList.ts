@@ -18,7 +18,7 @@ export async function getTravelList(params: Boolean) {
       `${SERVER_API_URL}/api/v1/travels?status=${params ? 'planned' : 'ended'}`,
       {
         headers: {
-          Authorization: accessToken,
+          'access-token': accessToken,
         },
       },
     );

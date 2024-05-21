@@ -7,8 +7,22 @@ import { AREAS } from '../assets/areas';
 import CustomDropdown from '../components/CustomDropdown';
 import { CustomDatePicker } from '../components/CustomDatePicker';
 import TravelMateList from '../components/TravelMateList';
+import SelectTemplate from '../components/SelectTemplate';
+import { bglist } from '../assets/bglist';
+import { getMateSearch } from '../lib/getMateSearch';
+import { setTravelMateList } from '../redux/slice/travelMateSlice';
+import { useDispatch } from 'react-redux';
+import { travelFormStatus } from '../interface/travelFormStatus';
+import { postNewTravel } from '../lib/postNewTravel';
+import { postTravelMates } from '../lib/postTravelMates';
+
+//vite 환경 변수 사용
+// const CLIENT_API_URL = import.meta.env.VITE_CLIENT_API_URL;
 
 function AddTravelPage() {
+  const dispatch = useDispatch();
+  const [travelName, setTravelName] = useState('');
+  const [templateNumber, setTemplateNumber] = useState(3);
   const [selectedArea, setSelectedArea] = useState('');
   const [selectedSubArea, setSelectedSubArea] = useState('');
   const [travelStartDate, setTravelStartDate] = useState<Date | null>(
@@ -16,6 +30,9 @@ function AddTravelPage() {
   );
   const [travelEndDate, setTravelEndDate] = useState<Date | null>(null);
 
+  const [isClickedChangeTamplate, setIsClickedChangeTamplate] = useState(false);
+
+  const [mateName, setMateName] = useState<string>('');
   const SUBAREAS =
     AREAS.find(area => area.name === selectedArea)?.subArea || [];
 
@@ -23,6 +40,48 @@ function AddTravelPage() {
     setSelectedArea(value);
     setSelectedSubArea('');
   };
+
+  function travelTemplateChangeClickHandler() {
+    setIsClickedChangeTamplate(true);
+  }
+
+  async function submitAddTravelHandler(
+    event: React.MouseEvent<HTMLDivElement>,
+  ) {
+    //여행 정보 제출
+    event.preventDefault();
+    if (travelStartDate && travelEndDate) {
+      const startAt = `${travelStartDate.getFullYear()}-${travelStartDate.getMonth() + 1 > 10 ? travelStartDate.getMonth() + 1 : '0' + travelStartDate.getMonth() + 1}-${travelStartDate.getDate() > 10 ? travelStartDate.getDate() : '0' + travelStartDate.getDate()}`;
+      const endAt = `${travelEndDate.getFullYear()}-${travelEndDate.getMonth() + 1 > 10 ? travelEndDate.getMonth() + 1 : '0' + travelEndDate.getMonth() + 1}-${travelEndDate.getDate() > 10 ? travelEndDate.getDate() : '0' + travelEndDate.getDate()}`;
+      const data: travelFormStatus = {
+        templateNum: templateNumber,
+        title: travelName,
+        sido: selectedArea,
+        sgg: selectedSubArea,
+        startAt: startAt,
+        endAt: endAt,
+      };
+
+      const travelid = await postNewTravel({ data });
+      if (travelid) {
+        postTravelMates(travelid);
+        window.location.href = '/';
+      } else {
+        console.log('새로운 여행 등록에 실패하였습니다.');
+      }
+    }
+  }
+
+  const handleAddMateClick = async () => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      const mateData = await getMateSearch(mateName);
+      if (mateData) {
+        dispatch(setTravelMateList(mateData));
+      }
+    }
+  };
+
   return (
     <>
       <Container>
@@ -30,14 +89,28 @@ function AddTravelPage() {
           <AiOutlineLeft />
         </Header>
         <Body>
-          <TemplateContainer>
-            <TemplateChangeBtn>커버 변경</TemplateChangeBtn>
+          <TemplateContainer color={`${bglist[templateNumber]}`}>
+            {isClickedChangeTamplate ? (
+              <SelectTemplate
+                setTemplateNumber={setTemplateNumber}
+                setIsClickedChangeTamplate={setIsClickedChangeTamplate}
+              />
+            ) : (
+              <TemplateChangeBtn onClick={travelTemplateChangeClickHandler}>
+                커버 변경
+              </TemplateChangeBtn>
+            )}
           </TemplateContainer>
 
           <TravelFormContainer>
             <TravelNameContainer>
               <TravelText>여행의 이름을 지어주세요.</TravelText>
-              <TravelNameInput></TravelNameInput>
+              <TravelNameInput
+                value={travelName}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setTravelName(e.target.value);
+                }}
+              ></TravelNameInput>
             </TravelNameContainer>
 
             <TravelPlaceContainer>
@@ -91,16 +164,23 @@ function AddTravelPage() {
             <TravelMateAddContainer>
               <TravelText>여행 메이트를 추가해보세요!</TravelText>
               <TravelMateAddInputContainer>
-                <TravelMateAddInput></TravelMateAddInput>
-                <AiOutlinePlusCircle />
+                <TravelMateAddInput
+                  value={mateName}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setMateName(e.target.value);
+                  }}
+                ></TravelMateAddInput>
+                <AiOutlinePlusCircle onClick={handleAddMateClick} />
               </TravelMateAddInputContainer>
               <TravelMateListContainer>
-                <TravelMateList></TravelMateList>
+                <TravelMateList />
               </TravelMateListContainer>
             </TravelMateAddContainer>
 
             <TravelSubmitButtonContainer>
-              <TravelSubmitBtn>여행 추가</TravelSubmitBtn>
+              <TravelSubmitBtn onClick={submitAddTravelHandler}>
+                여행 추가
+              </TravelSubmitBtn>
               <AiOutlineEdit />
             </TravelSubmitButtonContainer>
           </TravelFormContainer>
@@ -132,7 +212,7 @@ const TemplateContainer = styled.div`
 
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 
-  background: linear-gradient(90deg, #83d6cc 0%, #efa08b 100%);
+  background: ${prop => prop.color};
   /* border-radius: 0px 0px 10px 10px; */
 `;
 const TemplateChangeBtn = styled.button`

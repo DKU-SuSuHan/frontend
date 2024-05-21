@@ -54,6 +54,7 @@ function OauthKakaoRedirectPage() {
       console.log(error);
     }
   }
+
   async function postAuthorization() {
     const kakaoToken = localStorage.getItem('kakaoAccessToken');
     try {
