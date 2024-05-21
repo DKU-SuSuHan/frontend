@@ -3,6 +3,7 @@ import { getTravelList } from '../lib/getTravelList';
 import { RootState } from '../redux/store';
 import { useSelector } from 'react-redux';
 import { bglist } from '../assets/bglist';
+
 function TravelList({ listType }: { listType: Boolean }) {
   getTravelList(listType);
   const list = useSelector((state: RootState) =>

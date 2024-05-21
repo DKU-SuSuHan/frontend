@@ -1,28 +1,30 @@
 import { styled } from 'styled-components';
 import { AiOutlineMinusCircle } from 'react-icons/ai';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import { setMinusTravelMateList } from '../redux/slice/travelMateSlice';
+
 function TravelMateList() {
-  const list: Array<{ userProfile: string; userName: string }> = [
-    {
-      userProfile: '',
-      userName: 'minsu',
-    },
-    {
-      userProfile: '',
-      userName: 'sss',
-    },
-  ];
+  const dispatch = useDispatch();
+  const list = useSelector((status: RootState) => status.travelMate);
+
+  const handleDeleteMateClick = (index: number) => {
+    dispatch(setMinusTravelMateList(list[index]));
+  };
   return (
     <>
       {list.map((item, index) => {
         return (
-          <TravelMate key={index + '' + item.userName}>
+          <TravelMate key={index + '' + item.nickname}>
             <MateProfileContainer>
               <MateProfileImgContainer>
-                <MateProfileImg src={item.userProfile}></MateProfileImg>
+                <MateProfileImg src={item.profileImgageUrl}></MateProfileImg>
               </MateProfileImgContainer>
-              <MateName>{item.userName}</MateName>
+              <MateName>{item.nickname}</MateName>
             </MateProfileContainer>
-            <AiOutlineMinusCircle />
+            <AiOutlineMinusCircle
+              onClick={() => handleDeleteMateClick(index)}
+            />
           </TravelMate>
         );
       })}

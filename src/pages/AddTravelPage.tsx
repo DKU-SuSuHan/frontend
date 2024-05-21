@@ -12,11 +12,14 @@ import { bglist } from '../assets/bglist';
 import { getMateSearch } from '../lib/getMateSearch';
 import { setTravelMateList } from '../redux/slice/travelMateSlice';
 import { useDispatch } from 'react-redux';
+import { travelFormStatus } from '../interface/travelFormStatus';
+import { postNewTravel } from '../lib/postNewTravel';
+import { postTravelMates } from '../lib/postTravelMates';
 
 function AddTravelPage() {
   const dispatch = useDispatch();
   const [travelName, setTravelName] = useState('');
-  const [mateName, setMateName] = useState<string>('');
+  const [templateNumber, setTemplateNumber] = useState(3);
   const [selectedArea, setSelectedArea] = useState('');
   const [selectedSubArea, setSelectedSubArea] = useState('');
   const [travelStartDate, setTravelStartDate] = useState<Date | null>(
@@ -25,8 +28,8 @@ function AddTravelPage() {
   const [travelEndDate, setTravelEndDate] = useState<Date | null>(null);
 
   const [isClickedChangeTamplate, setIsClickedChangeTamplate] = useState(false);
-  const [templateNumber, setTemplateNumber] = useState(3);
 
+  const [mateName, setMateName] = useState<string>('');
   const SUBAREAS =
     AREAS.find(area => area.name === selectedArea)?.subArea || [];
 
@@ -39,8 +42,30 @@ function AddTravelPage() {
     setIsClickedChangeTamplate(true);
   }
 
-  function submitAddTravelHandler(event: React.MouseEvent<HTMLDivElement>) {
+  async function submitAddTravelHandler(
+    event: React.MouseEvent<HTMLDivElement>,
+  ) {
+    //여행 정보 제출
     event.preventDefault();
+    if (travelStartDate && travelEndDate) {
+      const startAt = `${travelStartDate.getFullYear()}-${travelStartDate.getMonth() + 1 > 10 ? travelStartDate.getMonth() + 1 : '0' + travelStartDate.getMonth() + 1}-${travelStartDate.getDate() > 10 ? travelStartDate.getDate() : '0' + travelStartDate.getDate()}`;
+      const endAt = `${travelEndDate.getFullYear()}-${travelEndDate.getMonth() + 1 > 10 ? travelEndDate.getMonth() + 1 : '0' + travelEndDate.getMonth() + 1}-${travelEndDate.getDate() > 10 ? travelEndDate.getDate() : '0' + travelEndDate.getDate()}`;
+      const data: travelFormStatus = {
+        templateNum: templateNumber,
+        title: travelName,
+        sido: selectedArea,
+        sgg: selectedSubArea,
+        startAt: startAt,
+        endAt: endAt,
+      };
+
+      const travelid = await postNewTravel({ data });
+      if (travelid) {
+        postTravelMates(travelid);
+      } else {
+        console.log('새로운 여행 등록에 실패하였습니다.');
+      }
+    }
   }
 
   const handleAddMateClick = async () => {

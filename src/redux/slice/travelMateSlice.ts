@@ -21,5 +21,6 @@ export const travelMateSlice = createSlice({
   },
 });
 
-export const { setTravelMateList } = travelMateSlice.actions;
+export const { setTravelMateList, setMinusTravelMateList } =
+  travelMateSlice.actions;
 export default travelMateSlice.reducer;
