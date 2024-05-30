@@ -1,11 +1,17 @@
 import { styled } from 'styled-components';
 import { getTravelList } from '../lib/getTravelList';
 import { RootState } from '../redux/store';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { bglist } from '../assets/bglist';
+import { useEffect } from 'react';
 
 function TravelList({ listType }: { listType: Boolean }) {
-  getTravelList(listType);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    getTravelList(listType, dispatch);
+  }, [listType, dispatch]); // listType 또는 dispatch가 변경될 때마다 호출
+
   const list = useSelector((state: RootState) =>
     listType ? state.travels.plannedTravels : state.travels.endedTravels,
   );

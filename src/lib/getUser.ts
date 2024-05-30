@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import {
   setId,
   setNickname,
@@ -7,23 +7,26 @@ import {
 } from '../redux/slice/userSlice';
 import { tokenExpirationHandler } from './tokenExpirationHandler';
 import { login, logout } from '../redux/slice/loginSlice';
+import { Dispatch } from '@reduxjs/toolkit';
 
 //vite 환경 변수 사용
 const SERVER_API_URL = import.meta.env.VITE_SERVER_API_URL;
 
-export async function getUser() {
-  const dispatch = useDispatch();
+export async function getUser(dispatch: Dispatch) {
+  // const dispatch = useDispatch();
   const accessToken = localStorage.getItem('accessToken');
 
-  // console.log(accessToken);
+  console.log(accessToken);
   try {
     const response = await axios.get(`${SERVER_API_URL}/api/v1/users/login`, {
       headers: {
-        'access-token': `${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
     if (response.status === 200) {
       //get한 정보 userSlice 저장
+      console.log(response.data);
+
       dispatch(setNickname(response.data.nickname));
       dispatch(setId(response.data.id));
       //이미지 있는 경우만 불러옴
@@ -39,6 +42,7 @@ export async function getUser() {
       console.log('session');
       tokenExpirationHandler(getUser);
     } else {
+      console.log(err);
       dispatch(logout());
     }
   }

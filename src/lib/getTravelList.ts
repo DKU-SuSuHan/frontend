@@ -1,16 +1,15 @@
 import axios from 'axios';
 import { tokenExpirationHandler } from './tokenExpirationHandler';
-import { useDispatch } from 'react-redux';
 import {
   setPlannedTravels,
   setEndedTravels,
 } from '../redux/slice/travelListSlice';
+import { Dispatch } from '@reduxjs/toolkit';
 
 //vite 환경 변수 사용
 const SERVER_API_URL = import.meta.env.VITE_SERVER_API_URL;
 
-export async function getTravelList(params: Boolean) {
-  const dispatch = useDispatch();
+export async function getTravelList(params: Boolean, dispatch: Dispatch) {
   const accessToken = localStorage.getItem('accessToken');
 
   try {
@@ -18,7 +17,7 @@ export async function getTravelList(params: Boolean) {
       `${SERVER_API_URL}/api/v1/travels?status=${params ? 'planned' : 'ended'}`,
       {
         headers: {
-          'access-token': accessToken,
+          Authorization: `Bearer ${accessToken}`,
         },
       },
     );

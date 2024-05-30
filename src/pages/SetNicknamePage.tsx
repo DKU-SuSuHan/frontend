@@ -2,11 +2,11 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { styled } from 'styled-components';
-import { setNickname } from '../redux/slice/userSlice';
+import { getUser } from '../lib/getUser';
+import { login } from '../redux/slice/loginSlice';
 
 //vite 환경 변수 사용
 const SERVER_API_URL = import.meta.env.VITE_SERVER_API_URL;
-const CLIENT_API_URL = import.meta.env.VIT;
 const accessToken = localStorage.getItem('accessToken');
 function SetNicknamePage() {
   const dispatch = useDispatch();
@@ -21,10 +21,10 @@ function SetNicknamePage() {
 
     try {
       const response = await axios.get(
-        `${SERVER_API_URL}/user/check/nickname?nickname=${userNickname}`,
+        `${SERVER_API_URL}/api/v1/users/check/nickname?nickname=${userNickname}`,
         {
           headers: {
-            'access-token': `${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         },
       );
@@ -48,27 +48,27 @@ function SetNicknamePage() {
     if (isCheckedNickname) {
       //중복 검사 한 상태
       //{api}/users/check/nickname?nckname={값}
-      const body = {
-        nickname: userNickname,
-      };
+
       try {
         const response = await axios.patch(
-          `${SERVER_API_URL}/user/nickname`,
-          body,
+          `${SERVER_API_URL}/api/v1/users/nickname`,
+          {
+            nickname: userNickname,
+          },
           {
             headers: {
-              'access-token': `${accessToken}`,
+              Authorization: `Bearer ${accessToken}`,
             },
           },
         );
         console.log(response);
         if (response.status === 200) {
           if (response.data.nickname) {
-            dispatch(setNickname(response.data.nickname));
+            getUser(dispatch);
+            alert('닉네임이 성공적으로 생성되었습니다!');
+            dispatch(login());
+            window.location.href = `/`;
           }
-
-          alert('닉네임이 성공적으로 생성되었습니다!');
-          window.location.href = `${CLIENT_API_URL}`;
         }
       } catch (error: any) {
         console.log(error);

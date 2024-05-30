@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { getUser } from '../lib/getUser';
 
 import { login } from '../redux/slice/loginSlice';
+import { RootState } from '../redux/store';
 
 //vite 환경 변수 사용
 const SERVER_API_URL = import.meta.env.VITE_SERVER_API_URL;
@@ -18,6 +19,8 @@ function OauthKakaoRedirectPage() {
   const dispatch = useDispatch();
   const authCode = new URL(window.location.href).searchParams.get('code');
   console.log(authCode);
+
+  const userNickname = useSelector((status: RootState) => status.user.nickname);
 
   async function getAuthorization() {
     const makeFormData = (params: { [key: string]: string }) => {
@@ -76,9 +79,13 @@ function OauthKakaoRedirectPage() {
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
 
-        getUser();
+        getUser(dispatch);
         dispatch(login());
-        window.location.href = '/';
+        if (userNickname == null) {
+          window.location.href = '/set-nickname';
+        } else {
+          window.location.href = '/';
+        }
       }
     } catch (error: any) {
       console.log('KakaoLogin Error');

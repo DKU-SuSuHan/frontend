@@ -19,7 +19,7 @@ export async function postTravelMates({ travelId }: { travelId: number }) {
       userIds,
       {
         headers: {
-          'access-token': `${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       },
     );

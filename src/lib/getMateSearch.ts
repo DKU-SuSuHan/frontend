@@ -10,7 +10,7 @@ export async function getMateSearch(mateName: string) {
       `${SERVER_API_URL}/api/v1/users/search?nickname=${mateName}`,
       {
         headers: {
-          'access-token': `${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       },
     );
