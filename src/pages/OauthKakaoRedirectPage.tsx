@@ -79,12 +79,15 @@ function OauthKakaoRedirectPage() {
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
 
-        getUser(dispatch);
-        dispatch(login());
+        window.location.href = '/set-nickname';
+        // getUser(dispatch);
+        // dispatch(login());
+        // window.location.href = '/set-nickname';
+
         if (userNickname == null) {
           window.location.href = '/set-nickname';
         } else {
-          window.location.href = '/';
+          // window.location.href = '/';
         }
       }
     } catch (error: any) {
