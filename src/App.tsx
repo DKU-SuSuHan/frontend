@@ -11,6 +11,7 @@ import SetNicknamePage from './pages/SetNicknamePage';
 import OauthKakaoRedirectPage from './pages/OauthKakaoRedirectPage';
 import AddTravelPage from './pages/AddTravelPage';
 import { getUser } from './lib/getUser';
+import RoadmapPage from './pages/RoadmapPage';
 
 function App() {
   const loginStatus = useSelector(
@@ -36,6 +37,7 @@ function App() {
           <Route path="/set-nickname" element={<SetNicknamePage />} />
           <Route path="/auth" element={<OauthKakaoRedirectPage />} />
           <Route path="/add-travel" element={<AddTravelPage />} />
+          <Route path="/teavel-roadmap/:travelid" element={<RoadmapPage />} />
         </Routes>
       </BrowserRouter>
     </>
