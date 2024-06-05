@@ -3,6 +3,8 @@ import { tokenExpirationHandler } from './tokenExpirationHandler';
 import {
   setPlannedTravels,
   setEndedTravels,
+  setRemoveEndedTravels,
+  setRemovePlannedTravels,
 } from '../redux/slice/travelListSlice';
 import { Dispatch } from '@reduxjs/toolkit';
 
@@ -22,6 +24,8 @@ export async function getTravelList(params: Boolean, dispatch: Dispatch) {
       },
     );
     if (response.status === 200) {
+      dispatch(setRemoveEndedTravels());
+      dispatch(setRemovePlannedTravels());
       response.data.map((item: any) => {
         {
           params
