@@ -164,13 +164,17 @@ function RoadmapPage() {
             );
           })}
         </Timeline>
-        <AddPlace>
-          <AddPlaceButton>
-            장소 등록
-            <EditIcon />
-          </AddPlaceButton>
-        </AddPlace>
       </DayDetails>
+      <AddPlace
+        onClick={() => {
+          window.location.href = '/add-place';
+        }}
+      >
+        <AddPlaceButton>
+          장소 등록
+          <EditIcon />
+        </AddPlaceButton>
+      </AddPlace>
     </Container>
   );
 }
@@ -375,6 +379,9 @@ const AddPlace = styled.div`
 `;
 
 const AddPlaceButton = styled.button`
+  position: absolute;
+  bottom: 40px;
+  right: 20px;
   background-color: #ffcc99;
   border: none;
   min-width: 100px; /* 변경된 부분 */
