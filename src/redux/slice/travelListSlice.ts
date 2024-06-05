@@ -17,8 +17,19 @@ export const travelListSlice = createSlice({
     setEndedTravels: (state, action: PayloadAction<travelCardStatus>) => {
       state.endedTravels.push(action.payload);
     },
+    setRemovePlannedTravels: state => {
+      state.plannedTravels = [];
+    },
+    setRemoveEndedTravels: state => {
+      state.endedTravels = [];
+    },
   },
 });
 
-export const { setPlannedTravels, setEndedTravels } = travelListSlice.actions;
+export const {
+  setPlannedTravels,
+  setEndedTravels,
+  setRemovePlannedTravels,
+  setRemoveEndedTravels,
+} = travelListSlice.actions;
 export default travelListSlice.reducer;
