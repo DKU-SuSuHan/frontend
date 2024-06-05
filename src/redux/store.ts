@@ -3,6 +3,8 @@ import loginSlice from '../redux/slice/loginSlice';
 import userSlice from '../redux/slice/userSlice';
 import travelListSlice from '../redux/slice/travelListSlice';
 import travelMateSlice from './slice/travelMateSlice';
+import travelDetailSlice from './slice/travelDetailSlice';
+import placesListSlice from './slice/placesListSlice';
 // configureStore를 사용하여 스토어를 설정
 const store = configureStore({
   reducer: {
@@ -11,6 +13,8 @@ const store = configureStore({
     user: userSlice,
     travels: travelListSlice,
     travelMate: travelMateSlice,
+    travelDetail: travelDetailSlice,
+    placeDetail: placesListSlice,
   },
 });
 

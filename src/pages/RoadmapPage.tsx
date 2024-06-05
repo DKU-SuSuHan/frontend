@@ -14,9 +14,90 @@ import { useParams } from 'react-router-dom';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import { useEffect, useState } from 'react';
+import { getTravelDetail } from '../lib/getTravelDetail';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import { getPlaceDetail } from '../lib/getPlaceDetail';
 
 function RoadmapPage() {
   const params = useParams();
+  const dispatch = useDispatch();
+
+  const travelDetail = useSelector((status: RootState) => status.travelDetail);
+  const travelPlaceDetail = useSelector(
+    (status: RootState) => status.placeDetail,
+  );
+  const [loading, setLoading] = useState<boolean>(true); // 로딩 상태 추가
+
+  // activeSlideIndex를 상태 변수로 선언합니다.
+  const [activeSlideIndex, setActiveSlideIndex] = useState<number | null>(1);
+
+  // SwiperSlide의 클릭 이벤트 핸들러를 정의합니다.
+  const handleSlideClick = (index: number) => {
+    setActiveSlideIndex(index);
+  };
+
+  useEffect(() => {
+    const fetchTravelDetail = async () => {
+      if (params.travelid !== undefined) {
+        try {
+          const data = await getTravelDetail(
+            params.travelid.substring(1),
+            dispatch,
+          );
+          console.log(data);
+          setLoading(false); // 데이터 가져오기 완료 후 로딩 상태 변경
+        } catch (error) {
+          console.error('Error fetching travel detail:', error);
+          setLoading(false); // 에러 발생 시에도 로딩 상태 변경
+        }
+      }
+    };
+
+    fetchTravelDetail();
+  }, [params.travelid, dispatch]);
+
+  useEffect(() => {
+    const fetchPlaceDetail = async () => {
+      if (params.travelid !== undefined && activeSlideIndex) {
+        try {
+          const data = await getPlaceDetail(
+            params.travelid.substring(1),
+            activeSlideIndex,
+            dispatch,
+          );
+          console.log(data);
+          setLoading(false);
+        } catch (error) {
+          console.error('Error fetching place detail:', error);
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchPlaceDetail();
+  }, [activeSlideIndex]);
+
+  if (loading) {
+    return <div>Loading...</div>; // 로딩 중이면 로딩 메시지 표시
+  }
+
+  const daySlides = [];
+  // for (let i = 1; i <= travelDetail.diffDays; i++)
+  for (let i = 1; i <= 5; i++) {
+    const isActive =
+      activeSlideIndex === null ? i === 1 : activeSlideIndex === i;
+    daySlides.push(
+      <SwiperSlideStyled
+        key={i}
+        className={isActive ? 'active' : ''}
+        onClick={() => handleSlideClick(i)}
+      >
+        <div className="day-label">day{i}</div>
+      </SwiperSlideStyled>,
+    );
+  }
 
   return (
     <Container>
@@ -31,10 +112,12 @@ function RoadmapPage() {
 
         <TitleIconsContainer>
           <TitleContainer>
-            <Title>강릉 고고링</Title>
+            <Title>{travelDetail.title}</Title>
             <SubTitleBudgetContainer>
-              <SubTitle>4월 9일 - 4월 12일</SubTitle>
-              <Budget>총 예산: 78000원</Budget>
+              <SubTitle>
+                {travelDetail.startAt}~{travelDetail.endAt}
+              </SubTitle>
+              <Budget>총 예산: {travelDetail.totalBudget}</Budget>
             </SubTitleBudgetContainer>
           </TitleContainer>
         </TitleIconsContainer>
@@ -61,57 +144,37 @@ function RoadmapPage() {
         onSlideChange={() => console.log('slide change')}
         onSwiper={swiper => console.log(swiper)}
       >
-        <SwiperSlideStyled className="active">
-          <div className="day-label">day1</div>
-        </SwiperSlideStyled>
-        <SwiperSlideStyled>
-          <div className="day-label">day2</div>
-        </SwiperSlideStyled>
-        <SwiperSlideStyled>
-          <div className="day-label">day3</div>
-        </SwiperSlideStyled>
-        <SwiperSlideStyled>
-          <div className="day-label">day4</div>
-        </SwiperSlideStyled>
-        <SwiperSlideStyled>
-          <div className="day-label">day5</div>
-        </SwiperSlideStyled>
+        {daySlides}
       </SwiperContainer>
       <DayDetails>
         <DayHeader>
-          <span>Day 1</span>
-          <Budget>하루 예산: 78000원</Budget>
+          <span>Day {activeSlideIndex}</span>
+          <Budget>{travelPlaceDetail.travelId}</Budget>
         </DayHeader>
         <Timeline>
-          <TimelineItem>
-            <TimelineDot />
-            <TimelineContent>
-              <PlaceName>강릉 중앙 시장</PlaceName>
-              <PlaceType>관광지 | 강원도 강릉시 금성로 21</PlaceType>
-            </TimelineContent>
-          </TimelineItem>
-          <TimelineItem>
-            <TimelineDot />
-            <TimelineContent>
-              <PlaceName>민속 옹심이 막국수</PlaceName>
-              <PlaceType>음식점 | 강원도 강릉시 지변동 644</PlaceType>
-            </TimelineContent>
-          </TimelineItem>
-          <TimelineItem>
-            <TimelineDot />
-            <TimelineContent>
-              <PlaceName>호텔 H Avenue</PlaceName>
-              <PlaceType>숙박시설 | 강원도 강릉시 강문동 창해로</PlaceType>
-            </TimelineContent>
-          </TimelineItem>
+          {travelPlaceDetail.travelPlaceList.map(item => {
+            return (
+              <TimelineItem>
+                <TimelineDot />
+                <TimelineContent>
+                  <PlaceName>{item.name}</PlaceName>
+                  <PlaceType>관광지 | {item.address}</PlaceType>
+                </TimelineContent>
+              </TimelineItem>
+            );
+          })}
         </Timeline>
-        <AddPlace>
-          <AddPlaceButton>
-            장소 등록
-            <EditIcon />
-          </AddPlaceButton>
-        </AddPlace>
       </DayDetails>
+      <AddPlace
+        onClick={() => {
+          window.location.href = '/add-place';
+        }}
+      >
+        <AddPlaceButton>
+          장소 등록
+          <EditIcon />
+        </AddPlaceButton>
+      </AddPlace>
     </Container>
   );
 }
@@ -316,6 +379,9 @@ const AddPlace = styled.div`
 `;
 
 const AddPlaceButton = styled.button`
+  position: absolute;
+  bottom: 40px;
+  right: 20px;
   background-color: #ffcc99;
   border: none;
   min-width: 100px; /* 변경된 부분 */
