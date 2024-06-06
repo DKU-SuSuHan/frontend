@@ -15,6 +15,11 @@ export async function getTravelList(params: Boolean, dispatch: Dispatch) {
   const accessToken = localStorage.getItem('accessToken');
 
   try {
+    if (params) {
+      dispatch(setRemoveEndedTravels());
+    } else {
+      dispatch(setRemovePlannedTravels());
+    }
     const response = await axios.get(
       `${SERVER_API_URL}/api/v1/travels?status=${params ? 'planned' : 'ended'}`,
       {
@@ -24,8 +29,6 @@ export async function getTravelList(params: Boolean, dispatch: Dispatch) {
       },
     );
     if (response.status === 200) {
-      dispatch(setRemoveEndedTravels());
-      dispatch(setRemovePlannedTravels());
       response.data.map((item: any) => {
         {
           params

@@ -167,7 +167,8 @@ function RoadmapPage() {
       </DayDetails>
       <AddPlace
         onClick={() => {
-          window.location.href = '/add-place';
+          console.log(params.travelid);
+          window.location.href = `/add-place/${params.travelid}`;
         }}
       >
         <AddPlaceButton>
