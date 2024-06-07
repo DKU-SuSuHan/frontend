@@ -20,6 +20,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { getPlaceDetail } from '../lib/getPlaceDetail';
 
+//vite 환경 변수 사용
+const CLIENT_API_URL = import.meta.env.VITE_CLIENT_API_URL;
+
 function RoadmapPage() {
   const params = useParams();
   const dispatch = useDispatch();
@@ -36,6 +39,10 @@ function RoadmapPage() {
   // SwiperSlide의 클릭 이벤트 핸들러를 정의합니다.
   const handleSlideClick = (index: number) => {
     setActiveSlideIndex(index);
+  };
+
+  const handleBellClick = () => {
+    window.location.href = `${CLIENT_API_URL}/travel-alarm/${params.travelid}`;
   };
 
   useEffect(() => {
@@ -105,7 +112,7 @@ function RoadmapPage() {
         <IconConteainer>
           <ArrowIcon />
           <Icons>
-            <BellIcon />
+            <BellIcon onClick={handleBellClick} />
             <UserIcon />
           </Icons>
         </IconConteainer>
