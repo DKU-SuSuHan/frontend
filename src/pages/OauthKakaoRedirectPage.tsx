@@ -1,10 +1,7 @@
 import axios from 'axios';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { getUser } from '../lib/getUser';
-
-import { login } from '../redux/slice/loginSlice';
 import { RootState } from '../redux/store';
 
 //vite 환경 변수 사용
@@ -15,8 +12,6 @@ const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
 function OauthKakaoRedirectPage() {
   // const REDIRECT_URI = `${window.location.href}`;
   const REDIRECT_URI = `${CLIENT_API_URL}/auth`;
-
-  const dispatch = useDispatch();
   const authCode = new URL(window.location.href).searchParams.get('code');
   console.log(authCode);
 
