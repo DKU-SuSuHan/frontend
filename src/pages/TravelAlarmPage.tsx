@@ -15,6 +15,34 @@ function TravelAlarmPage() {
         <Header>
           <ArrowIconLeft />
         </Header>
+        <NewTravel>'민수와 여행' 여행이 새로 생성되었습니다!</NewTravel>
+        <MessageList>
+          <UserProfileContainer>
+            <UserProfileImgContainer>
+              <UserProfileImg src={userProfileImageUrl}></UserProfileImg>
+            </UserProfileImgContainer>
+            <UserNameAndMessageDateContainer>
+              <UserNickname>민수</UserNickname>
+              <MessageSandingDate>2024-06-12</MessageSandingDate>
+            </UserNameAndMessageDateContainer>
+          </UserProfileContainer>
+
+          <MessageContainer>
+            <MassageTextContainer>
+              <MassageText>
+                민수 님<p></p>로드맵에 장소를 등록하였습니다.
+              </MassageText>
+            </MassageTextContainer>
+
+            <PlaceMesageInfoContainer>
+              <PlaceMessage>
+                <PlaceTravelDay>D-day 1</PlaceTravelDay>
+                <PlaceTravelText>새로운 장소 등록!</PlaceTravelText>
+              </PlaceMessage>
+              <ArrowIconRight />
+            </PlaceMesageInfoContainer>
+          </MessageContainer>
+        </MessageList>
 
         <MessageList>
           <UserProfileContainer>
@@ -22,21 +50,21 @@ function TravelAlarmPage() {
               <UserProfileImg src={userProfileImageUrl}></UserProfileImg>
             </UserProfileImgContainer>
             <UserNameAndMessageDateContainer>
-              <UserNickname>userNickname</UserNickname>
-              <MessageSandingDate>2024-09-08</MessageSandingDate>
+              <UserNickname>민수</UserNickname>
+              <MessageSandingDate>2024-06-12</MessageSandingDate>
             </UserNameAndMessageDateContainer>
           </UserProfileContainer>
 
           <MessageContainer>
             <MassageTextContainer>
               <MassageText>
-                userNickname 님<p></p>로드맵에 장소를 등록하였습니다.
+                민수 님<p></p>로드맵에 장소를 등록하였습니다.
               </MassageText>
             </MassageTextContainer>
 
             <PlaceMesageInfoContainer>
               <PlaceMessage>
-                <PlaceTravelDay>D-day 1</PlaceTravelDay>
+                <PlaceTravelDay>D-day 2</PlaceTravelDay>
                 <PlaceTravelText>새로운 장소 등록!</PlaceTravelText>
               </PlaceMessage>
               <ArrowIconRight />
@@ -102,6 +130,21 @@ const UserProfileImg = styled.img`
 
   border: 1px solid #ffffff;
   border-radius: 500px;
+`;
+
+const NewTravel = styled.div`
+  /* width: 84px; */
+  height: 22px;
+
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 150%;
+
+  color: #383838;
+
+  margin: 0 9px;
 `;
 const UserNickname = styled.div`
   /* width: 84px; */

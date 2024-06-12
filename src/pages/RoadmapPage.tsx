@@ -156,7 +156,7 @@ function RoadmapPage() {
       <DayDetails>
         <DayHeader>
           <span>Day {activeSlideIndex}</span>
-          <Budget>{travelPlaceDetail.travelId}</Budget>
+          <Budget></Budget>
         </DayHeader>
         <Timeline>
           {travelPlaceDetail.travelPlaceList.map(item => {
@@ -165,7 +165,7 @@ function RoadmapPage() {
                 <TimelineDot />
                 <TimelineContent>
                   <PlaceName>{item.name}</PlaceName>
-                  <PlaceType>관광지 | {item.address}</PlaceType>
+                  <PlaceType>수기작성 장소 | {item.address}</PlaceType>
                 </TimelineContent>
               </TimelineItem>
             );
